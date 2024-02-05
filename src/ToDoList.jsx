@@ -11,27 +11,20 @@ export const List = () => {
   const [list, setList] = useState([]);
 
   const onSubmit = (event) => {
-    const task = { task: inputValue };
+    const item = { task: inputValue , tachado: false};
     event.preventDefault();
-    console.log(inputValue);
-    setList((list) => [...list, task]);
+    setList((list) => [...list, item]);
     setInputValue("");
   };
 
-  const [checked, setChecked] = useState([]);
-
-  const handleChange = (event) => {
-    var checkedList = [...checked];
-    if (event.target.checked) {
-      checkedList = [...checked, event.target.value];
-    } else {
-      checkedList.splice(checked.indexOf(event.target.value), 1);
-    }
-    setChecked(checkedList);
+  const handleChange = (event, index) => {
+    var checkedList = [...list];
+    checkedList[index].tachado = !checkedList[index].tachado
+    setList(checkedList);
   };
 
-  const isChecked = (item) =>
-    checked.includes(item) ? "checked-item" : "not-checked-item";
+  const isChecked = (tachado) =>
+    tachado ? "checked-item" : "not-checked-item";
 
   return (
     <>
@@ -47,8 +40,8 @@ export const List = () => {
       <div>
         {list.map((item, index) => (
           <div className="list" key={index}>
-            <input value={item.task} type="checkbox" onChange={handleChange} />
-            <span className={isChecked(item.task)}>{item.task}</span>
+            <input value={index} type="checkbox" onChange={event => handleChange(event, index)} />
+            <span className={isChecked(item.tachado)}>{item.task}</span>
           </div>
         ))}
       </div>
